@@ -1,0 +1,13 @@
+name: ZooTycoon
+version: '${project.version}'
+main: com.zootycoon.ZooTycoon
+api-version: '1.21'
+authors: [ Antigravity ]
+depend: [Vault]
+softdepend: [Vault]
+
+commands:
+  zoo:
+    description: Main command for Zoo Tycoon
+    usage: /zoo <args>
+    aliases: [zt]
