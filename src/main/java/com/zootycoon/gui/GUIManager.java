@@ -30,6 +30,10 @@ public class GUIManager implements Listener {
         addItem(shop, 13, Material.SNIFFER_SPAWN_EGG, "Elephant", 1000, "Spawns an Elephant");
         addItem(shop, 15, Material.HORSE_SPAWN_EGG, "Zebra", 300, "Spawns a Zebra");
 
+        // Attractions
+        addItem(shop, 20, Material.BEACON, "Carousel", 5000, "Animated Carousel Ride");
+        addItem(shop, 22, Material.MINECART, "Rollercoaster", 8000, "Looping Coaster");
+
         player.openInventory(shop);
     }
 
@@ -60,20 +64,30 @@ public class GUIManager implements Listener {
 
         if (price > 0) {
             com.zootycoon.managers.EconomyManager econ = plugin.getEconomyManager();
-            if (econ.hasEnough(player, price)) {
-                econ.withdrawPlayer(player, price);
-                player.sendMessage(ChatColor.GREEN + "You bought " + clicked.getItemMeta().getDisplayName());
+            // Normal items
+            if (clicked.getType() == Material.BEACON || clicked.getType() == Material.MINECART) {
+                // Start Attraction Placement
+                String type = clicked.getItemMeta().getDisplayName().contains("Carousel") ? "Carousel"
+                        : "Rollercoaster";
 
-                // Give the item to the player (copy of clicked item but cleaned lore
-                // potentially)
-                ItemStack boughtItem = new ItemStack(clicked.getType());
-                ItemMeta meta = boughtItem.getItemMeta();
-                meta.setDisplayName(clicked.getItemMeta().getDisplayName()); // Keep custom name for spawning logic
-                boughtItem.setItemMeta(meta);
-
-                player.getInventory().addItem(boughtItem);
+                // Don't charge yet, give Wand first!
+                player.closeInventory();
+                plugin.getAttractionManager().giveWand(player, type);
             } else {
-                player.sendMessage(ChatColor.RED + "You cannot afford this! Balance: " + econ.getBalance(player));
+                // Animals/Items
+                if (econ.hasEnough(player, price)) {
+                    econ.withdrawPlayer(player, price);
+                    player.sendMessage(ChatColor.GREEN + "You bought " + clicked.getItemMeta().getDisplayName());
+
+                    ItemStack boughtItem = new ItemStack(clicked.getType());
+                    ItemMeta meta = boughtItem.getItemMeta();
+                    meta.setDisplayName(clicked.getItemMeta().getDisplayName()); // Keep custom name for spawning logic
+                    boughtItem.setItemMeta(meta);
+
+                    player.getInventory().addItem(boughtItem);
+                } else {
+                    player.sendMessage(ChatColor.RED + "You cannot afford this! Balance: " + econ.getBalance(player));
+                }
             }
         }
     }

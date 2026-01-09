@@ -14,6 +14,7 @@ public final class ZooTycoon extends JavaPlugin {
     private ZooManager zooManager;
     private GUIManager guiManager;
     private EconomyManager economyManager;
+    private com.zootycoon.managers.AttractionManager attractionManager;
 
     @Override
     public void onEnable() {
@@ -23,12 +24,14 @@ public final class ZooTycoon extends JavaPlugin {
         economyManager = new EconomyManager(this);
         zooManager = new ZooManager(this);
         guiManager = new GUIManager(this);
+        attractionManager = new com.zootycoon.managers.AttractionManager(this);
 
         getCommand("zoo").setExecutor(new ZooCommand(this));
 
         getServer().getPluginManager().registerEvents(new ZooListener(this), this);
         getServer().getPluginManager().registerEvents(guiManager, this);
         getServer().getPluginManager().registerEvents(new AnimalManager(this), this);
+        getServer().getPluginManager().registerEvents(attractionManager, this);
 
         getLogger().info("ZooTycoon has been enabled!");
     }
@@ -58,5 +61,9 @@ public final class ZooTycoon extends JavaPlugin {
 
     public EconomyManager getEconomyManager() {
         return economyManager;
+    }
+
+    public com.zootycoon.managers.AttractionManager getAttractionManager() {
+        return attractionManager;
     }
 }
