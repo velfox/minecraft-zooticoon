@@ -42,7 +42,7 @@ public class GUIManager implements Listener {
     }
 
     public void openShop(Player player) {
-        Inventory shop = Bukkit.createInventory(null, 27, ChatColor.BLUE + "Zoo Shop");
+        Inventory shop = Bukkit.createInventory(null, 45, ChatColor.BLUE + "Zoo Shop");
 
         // Example items
         addItem(shop, 11, Material.OCELOT_SPAWN_EGG, "Lion", 500, "Spawns a Lion");
@@ -93,8 +93,13 @@ public class GUIManager implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         String title = event.getView().getTitle();
-        if (!title.equals(ChatColor.BLUE + "Zoo Shop") && !title.equals(ChatColor.DARK_GREEN + "Zoo Tycoon Menu"))
+        // Relaxed check to avoid ChatColor mismatches
+        boolean isShop = title.contains("Zoo Shop");
+        boolean isMenu = title.contains("Zoo Tycoon Menu");
+
+        if (!isShop && !isMenu)
             return;
+
         event.setCancelled(true); // Prevent taking items
 
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
@@ -104,9 +109,11 @@ public class GUIManager implements Listener {
         ItemStack clicked = event.getCurrentItem();
 
         // Main Menu Logic
-        if (title.equals(ChatColor.DARK_GREEN + "Zoo Tycoon Menu")) {
+        if (isMenu) {
             if (clicked.getType() == Material.EMERALD) {
-                openShop(player);
+                // Open Shop with a 1-tick delay to be safe
+                player.closeInventory();
+                plugin.getServer().getScheduler().runTask(plugin, () -> openShop(player));
             }
             return;
         }
