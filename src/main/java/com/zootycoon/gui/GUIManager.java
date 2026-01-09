@@ -34,6 +34,9 @@ public class GUIManager implements Listener {
         addItem(shop, 20, Material.BEACON, "Carousel", 5000, "Animated Carousel Ride");
         addItem(shop, 22, Material.MINECART, "Rollercoaster", 8000, "Looping Coaster");
 
+        // Staff
+        addItem(shop, 24, Material.VILLAGER_SPAWN_EGG, "Hire Zookeeper", 2000, "Auto-feeds animals nearby");
+
         player.openInventory(shop);
     }
 

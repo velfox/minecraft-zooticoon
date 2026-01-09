@@ -15,6 +15,9 @@ public final class ZooTycoon extends JavaPlugin {
     private GUIManager guiManager;
     private EconomyManager economyManager;
     private com.zootycoon.managers.AttractionManager attractionManager;
+    private com.zootycoon.managers.GuestManager guestManager;
+    private com.zootycoon.managers.StaffManager staffManager;
+    private com.zootycoon.managers.AnimalManager animalManager;
 
     @Override
     public void onEnable() {
@@ -25,13 +28,17 @@ public final class ZooTycoon extends JavaPlugin {
         zooManager = new ZooManager(this);
         guiManager = new GUIManager(this);
         attractionManager = new com.zootycoon.managers.AttractionManager(this);
+        guestManager = new com.zootycoon.managers.GuestManager(this);
+        animalManager = new com.zootycoon.managers.AnimalManager(this);
+        staffManager = new com.zootycoon.managers.StaffManager(this);
 
         getCommand("zoo").setExecutor(new ZooCommand(this));
 
         getServer().getPluginManager().registerEvents(new ZooListener(this), this);
         getServer().getPluginManager().registerEvents(guiManager, this);
-        getServer().getPluginManager().registerEvents(new AnimalManager(this), this);
+        getServer().getPluginManager().registerEvents(animalManager, this);
         getServer().getPluginManager().registerEvents(attractionManager, this);
+        getServer().getPluginManager().registerEvents(guestManager, this);
 
         getLogger().info("ZooTycoon has been enabled!");
     }
@@ -65,5 +72,17 @@ public final class ZooTycoon extends JavaPlugin {
 
     public com.zootycoon.managers.AttractionManager getAttractionManager() {
         return attractionManager;
+    }
+
+    public com.zootycoon.managers.GuestManager getGuestManager() {
+        return guestManager;
+    }
+
+    public com.zootycoon.managers.AnimalManager getAnimalManager() {
+        return animalManager;
+    }
+
+    public com.zootycoon.managers.StaffManager getStaffManager() {
+        return staffManager;
     }
 }

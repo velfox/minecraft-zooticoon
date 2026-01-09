@@ -1,9 +1,13 @@
-C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\managers\EconomyManager.java
 C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\objects\Zoo.java
+C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\listeners\ZooListener.java
+C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\objects\GuestData.java
+C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\managers\ZooManager.java
+C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\managers\StaffManager.java
+C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\managers\EconomyManager.java
 C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\commands\ZooCommand.java
 C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\gui\GUIManager.java
-C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\listeners\ZooListener.java
 C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\managers\AnimalManager.java
-C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\managers\ZooManager.java
+C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\objects\AnimalData.java
 C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\managers\AttractionManager.java
+C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\managers\GuestManager.java
 C:\Users\ongei\Documents\minecraft zooticoon\src\main\java\com\zootycoon\ZooTycoon.java
