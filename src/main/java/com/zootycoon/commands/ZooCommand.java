@@ -112,13 +112,33 @@ public class ZooCommand implements CommandExecutor {
         }
 
         if (args[0].equalsIgnoreCase("menu")) {
-            plugin.getGuiManager().openShop(player); // For now just open shop, can extend to main menu
+            plugin.getGuiManager().openMainMenu(player);
             return true;
         }
 
         if (args[0].equalsIgnoreCase("monnyload")) {
             plugin.getEconomyManager().depositPlayer(player, 10000.0);
             player.sendMessage(ChatColor.GREEN + "Money loaded! +$10000");
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("setprice")) {
+            if (args.length < 2) {
+                player.sendMessage(ChatColor.RED + "Usage: /zoo setprice <amount>");
+                return true;
+            }
+            if (!zooManager.hasZoo(player.getUniqueId())) {
+                player.sendMessage(ChatColor.RED + "You don't have a zoo!");
+                return true;
+            }
+
+            try {
+                double price = Double.parseDouble(args[1]);
+                zooManager.getZoo(player.getUniqueId()).setEntranceFee(price);
+                player.sendMessage(ChatColor.GREEN + "Entrance fee set to $" + price);
+            } catch (NumberFormatException e) {
+                player.sendMessage(ChatColor.RED + "Invalid number.");
+            }
             return true;
         }
 

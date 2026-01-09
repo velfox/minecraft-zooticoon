@@ -34,10 +34,13 @@ public class EconomyManager {
         saveEconomy();
     }
 
-    public void withdrawPlayer(Player player, double amount) {
+    public boolean withdrawPlayer(Player player, double amount) {
+        if (!hasEnough(player, amount))
+            return false;
         double current = getBalance(player);
         balances.put(player.getUniqueId(), current - amount);
         saveEconomy();
+        return true;
     }
 
     public boolean hasEnough(Player player, double amount) {

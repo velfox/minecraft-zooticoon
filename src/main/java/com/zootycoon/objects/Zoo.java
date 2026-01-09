@@ -14,6 +14,7 @@ public class Zoo {
     private Location entrance;
     private List<String> claimedChunks; // Stored as "world:x:z"
     private long visitCount;
+    private double entranceFee = 10.0; // Default $10
 
     public Zoo(UUID owner, String name, Location entrance) {
         this.owner = owner;
@@ -21,9 +22,17 @@ public class Zoo {
         this.entrance = entrance;
         this.claimedChunks = new ArrayList<>();
         this.visitCount = 0;
-        
+
         // Auto-claim the entrance chunk
         addChunk(entrance.getChunk());
+    }
+
+    public double getEntranceFee() {
+        return entranceFee;
+    }
+
+    public void setEntranceFee(double fee) {
+        this.entranceFee = fee;
     }
 
     public UUID getOwner() {
@@ -56,7 +65,7 @@ public class Zoo {
             claimedChunks.add(key);
         }
     }
-    
+
     public boolean isChunkClaimed(Chunk chunk) {
         String key = chunk.getWorld().getName() + ":" + chunk.getX() + ":" + chunk.getZ();
         return claimedChunks.contains(key);
