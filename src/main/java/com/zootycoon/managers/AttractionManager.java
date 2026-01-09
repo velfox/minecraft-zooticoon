@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.zootycoon.objects.Attraction;
+
 public class AttractionManager implements Listener {
 
     private final ZooTycoon plugin;
@@ -32,6 +34,13 @@ public class AttractionManager implements Listener {
 
     public AttractionManager(ZooTycoon plugin) {
         this.plugin = plugin;
+    }
+
+    // Simple storage for active attractions
+    private final java.util.List<Attraction> attractions = new java.util.ArrayList<>();
+
+    public java.util.List<Attraction> getAttractions() {
+        return attractions;
     }
 
     public void giveWand(Player player, String attractionType) {
@@ -162,16 +171,57 @@ public class AttractionManager implements Listener {
     }
 
     private void buildRollercoaster(Location origin) {
-        // Simple loop
-        int size = 6;
-        for (int x = 0; x < size; x++) {
-            origin.getWorld().getBlockAt(origin.clone().add(x, 0, 0)).setType(Material.RED_WOOL);
-            origin.getWorld().getBlockAt(origin.clone().add(x, 1, 0)).setType(Material.POWERED_RAIL);
-            // Power it
-            origin.getWorld().getBlockAt(origin.clone().add(x, 0, 0)).getRelative(BlockFace.DOWN)
-                    .setType(Material.REDSTONE_BLOCK);
+        // 3D Coaster Logic
+        // Shape: Up, Flat, Down, Loop
+        org.bukkit.util.Vector[] path = {
+                new org.bukkit.util.Vector(0, 0, 0),
+                new org.bukkit.util.Vector(1, 1, 0), // Up
+                new org.bukkit.util.Vector(2, 2, 0), // Up
+                new org.bukkit.util.Vector(3, 2, 0), // Flat
+                new org.bukkit.util.Vector(4, 2, 0), // Flat
+                new org.bukkit.util.Vector(5, 1, 0), // Down
+                new org.bukkit.util.Vector(6, 0, 0), // Down
+                new org.bukkit.util.Vector(7, 0, 0), // Flat
+                new org.bukkit.util.Vector(8, 0, 1), // Curve Right
+                new org.bukkit.util.Vector(8, 0, 2),
+                new org.bukkit.util.Vector(7, 0, 3), // Curve Back
+                new org.bukkit.util.Vector(6, 0, 3),
+                new org.bukkit.util.Vector(5, 0, 3)
+        };
+
+        for (org.bukkit.util.Vector vec : path) {
+            Location loc = origin.clone().add(vec);
+
+            // 1. Tracks (Powered Rail)
+            Block block = loc.getBlock();
+            block.setType(Material.POWERED_RAIL);
+
+            // 2. Power Source (Redstone Block underneath)
+            Block under = loc.clone().subtract(0, 1, 0).getBlock();
+            under.setType(Material.REDSTONE_BLOCK);
+
+            // 3. Supports (Fences down to ground)
+            // Start from 2 blocks below track (below redstone block)
+            Location supportLoc = loc.clone().subtract(0, 2, 0);
+            while (supportLoc.getBlock().getType().isAir() || supportLoc.getBlock().isPassable()) {
+                if (supportLoc.getBlockY() <= origin.getWorld().getMinHeight())
+                    break;
+
+                supportLoc.getBlock().setType(Material.OAK_FENCE);
+                supportLoc.subtract(0, 1, 0);
+            }
         }
-        // Spawn cart
-        origin.getWorld().spawnEntity(origin.clone().add(0, 1.5, 0), EntityType.MINECART);
+
+        // Spawn Cart at start
+        origin.getWorld().spawnEntity(origin.clone().add(0.5, 0.2, 0.5), EntityType.MINECART);
+
+        // Build Queue Line (Simple)
+        Location queueStart = origin.clone().subtract(2, 0, 0);
+        origin.getWorld().getBlockAt(queueStart).setType(Material.OAK_FENCE_GATE); // Entrance
+        origin.getWorld().getBlockAt(queueStart.clone().subtract(1, 0, 0)).setType(Material.OAK_FENCE);
+        origin.getWorld().getBlockAt(queueStart.clone().subtract(2, 0, 0)).setType(Material.OAK_FENCE);
+
+        // Register
+        attractions.add(new Attraction("Rollercoaster", origin, queueStart));
     }
 }

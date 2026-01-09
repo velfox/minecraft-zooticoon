@@ -2,8 +2,10 @@ com\zootycoon\managers\ZooManager.class
 com\zootycoon\ZooTycoon.class
 com\zootycoon\managers\AnimalManager.class
 com\zootycoon\managers\StaffManager$1.class
+com\zootycoon\objects\Attraction.class
 com\zootycoon\managers\EconomyManager.class
 com\zootycoon\objects\Enclosure.class
+com\zootycoon\objects\GuestData$State.class
 com\zootycoon\objects\Zoo.class
 com\zootycoon\managers\EnclosureManager.class
 com\zootycoon\managers\AttractionManager$1.class

@@ -1,6 +1,7 @@
 package com.zootycoon.managers;
 
 import com.zootycoon.ZooTycoon;
+import com.zootycoon.objects.Attraction;
 import com.zootycoon.objects.GuestData;
 import com.zootycoon.objects.Zoo;
 import net.md_5.bungee.api.ChatMessageType;
@@ -70,8 +71,35 @@ public class GuestManager implements Listener {
                     GuestData data = entry.getValue();
                     data.tick();
 
-                    // Simple interaction: if entity is near an animal, maybe boost happiness?
-                    // Future: Pathfinding
+                    Villager villager = (Villager) entity;
+
+                    // AI Implementation
+                    if (data.getCurrentState() == GuestData.State.WANDERING) {
+                        // 10% chance to look for an attraction
+                        if (Math.random() < 0.1) {
+                            java.util.List<Attraction> attractions = plugin.getAttractionManager().getAttractions();
+                            if (!attractions.isEmpty()) {
+                                // Pick random
+                                Attraction attr = attractions.get((int) (Math.random() * attractions.size()));
+                                data.setTargetLocation(attr.getQueueStart());
+                                data.setCurrentState(GuestData.State.QUEUING);
+                                villager.setCustomName(ChatColor.GOLD + "Guest (Going to " + "Ride" + ")");
+                                villager.teleport(attr.getQueueStart()); // Teleport instead of pathfind
+                            }
+                        }
+                    } else if (data.getCurrentState() == GuestData.State.QUEUING) {
+                        // Check distance to queue start
+                        if (villager.getLocation().distanceSquared(data.getTargetLocation()) < 4) {
+                            // "In Line" - For now, simple immediate ride
+                            villager.setCustomName(ChatColor.GREEN + "Guest (Riding!)");
+                            data.setCurrentState(GuestData.State.WANDERING); // Reset for now
+                            // Teleport to ride start (simplified)
+                        } else {
+                            // Keep updating path in case they get stuck
+                            if (Math.random() < 0.05)
+                                villager.teleport(data.getTargetLocation());
+                        }
+                    }
 
                     return false;
                 });

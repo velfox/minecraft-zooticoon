@@ -1,10 +1,19 @@
 package com.zootycoon.objects;
 
+import org.bukkit.Location;
 import org.bukkit.ChatColor;
 import java.util.UUID;
 
 public class GuestData {
+    public enum State {
+        WANDERING, QUEUING, RIDING
+    }
+
     private final UUID entityId;
+    private State currentState = State.WANDERING;
+    private Location targetLocation;
+
+    // ... existing stats ...
     private double budget;
     private double happiness;
     private double hunger;
@@ -42,7 +51,22 @@ public class GuestData {
                 ChatColor.GRAY, thinking);
     }
 
-    // Getters and Setters omitted for brevity but public fields used logic above
+    public State getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(State state) {
+        this.currentState = state;
+    }
+
+    public Location getTargetLocation() {
+        return targetLocation;
+    }
+
+    public void setTargetLocation(Location targetLocation) {
+        this.targetLocation = targetLocation;
+    }
+
     public double getBudget() {
         return budget;
     }
