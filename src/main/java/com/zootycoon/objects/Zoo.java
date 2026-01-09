@@ -78,4 +78,25 @@ public class Zoo {
     public void addVisit() {
         this.visitCount++;
     }
+
+    private List<Enclosure> enclosures = new ArrayList<>();
+
+    public void addEnclosure(Enclosure enclosure) {
+        enclosures.add(enclosure);
+    }
+
+    public List<Enclosure> getEnclosures() {
+        return enclosures;
+    }
+
+    /**
+     * Checks if a location is inside any of this zoo's enclosures.
+     */
+    public boolean isInsideEnclosure(Location loc) {
+        for (Enclosure enc : enclosures) {
+            if (enc.isInside(loc))
+                return true;
+        }
+        return false;
+    }
 }

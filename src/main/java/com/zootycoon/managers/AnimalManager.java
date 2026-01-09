@@ -98,6 +98,14 @@ public class AnimalManager implements Listener {
                 return;
             }
 
+            // Check if inside enclosure
+            if (!plugin.getEnclosureManager().isLocationValid(event.getClickedBlock().getLocation(),
+                    event.getPlayer().getUniqueId())) {
+                event.getPlayer()
+                        .sendMessage(ChatColor.RED + "You can only spawn animals inside a purchased Enclosure!");
+                return;
+            }
+
             LivingEntity entity = (LivingEntity) event.getClickedBlock().getWorld().spawnEntity(
                     event.getClickedBlock().getLocation().add(0, 1, 0), entityType);
 

@@ -59,6 +59,10 @@ public class GUIManager implements Listener {
         // Facilities
         addItem(shop, 25, Material.OAK_FENCE, "Burger Stand", 500, "Guests buy food here");
 
+        // Enclosures
+        addItem(shop, 29, Material.ACACIA_FENCE, "Savannah Enclosure", 2000, "Habitat for Lions and Zebras");
+        addItem(shop, 31, Material.JUNGLE_FENCE, "Jungle Enclosure", 2500, "Habitat for Elephants");
+
         player.openInventory(shop);
     }
 
@@ -135,6 +139,16 @@ public class GUIManager implements Listener {
                     player.sendMessage(ChatColor.GREEN + "You bought a Burger Stand!");
                 } else {
                     player.sendMessage(ChatColor.RED + "Cannot afford Burger Stand!");
+                }
+            } else if (clicked.getType() == Material.ACACIA_FENCE || clicked.getType() == Material.JUNGLE_FENCE) {
+                // Enclosure
+                if (econ.withdrawPlayer(player, price)) {
+                    player.closeInventory();
+                    String type = clicked.getItemMeta().getDisplayName().contains("Savannah") ? "Savannah" : "Jungle";
+                    plugin.getEnclosureManager().giveWand(player, type);
+                    player.sendMessage(ChatColor.GREEN + "You bought an " + type + " Enclosure!");
+                } else {
+                    player.sendMessage(ChatColor.RED + "Cannot afford Enclosure!");
                 }
             } else {
                 // Animals/Items
