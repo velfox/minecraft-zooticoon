@@ -3,7 +3,7 @@ version: '${project.version}'
 main: com.zootycoon.ZooTycoon
 api-version: '1.21'
 authors: [ Antigravity ]
-softdepend: [Vault]
+
 
 commands:
   zoo:

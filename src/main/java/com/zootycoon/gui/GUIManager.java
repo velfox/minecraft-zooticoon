@@ -1,7 +1,6 @@
 package com.zootycoon.gui;
 
 import com.zootycoon.ZooTycoon;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -60,25 +59,21 @@ public class GUIManager implements Listener {
         double price = getPriceFromLore(clicked);
 
         if (price > 0) {
-            Economy econ = plugin.getEconomy();
-            if (econ != null) {
-                if (econ.getBalance(player) >= price) {
-                    econ.withdrawPlayer(player, price);
-                    player.sendMessage(ChatColor.GREEN + "You bought " + clicked.getItemMeta().getDisplayName());
+            com.zootycoon.managers.EconomyManager econ = plugin.getEconomyManager();
+            if (econ.hasEnough(player, price)) {
+                econ.withdrawPlayer(player, price);
+                player.sendMessage(ChatColor.GREEN + "You bought " + clicked.getItemMeta().getDisplayName());
 
-                    // Give the item to the player (copy of clicked item but cleaned lore
-                    // potentially)
-                    ItemStack boughtItem = new ItemStack(clicked.getType());
-                    ItemMeta meta = boughtItem.getItemMeta();
-                    meta.setDisplayName(clicked.getItemMeta().getDisplayName()); // Keep custom name for spawning logic
-                    boughtItem.setItemMeta(meta);
+                // Give the item to the player (copy of clicked item but cleaned lore
+                // potentially)
+                ItemStack boughtItem = new ItemStack(clicked.getType());
+                ItemMeta meta = boughtItem.getItemMeta();
+                meta.setDisplayName(clicked.getItemMeta().getDisplayName()); // Keep custom name for spawning logic
+                boughtItem.setItemMeta(meta);
 
-                    player.getInventory().addItem(boughtItem);
-                } else {
-                    player.sendMessage(ChatColor.RED + "You cannot afford this!");
-                }
+                player.getInventory().addItem(boughtItem);
             } else {
-                player.sendMessage(ChatColor.RED + "Economy not enabled!");
+                player.sendMessage(ChatColor.RED + "You cannot afford this! Balance: " + econ.getBalance(player));
             }
         }
     }

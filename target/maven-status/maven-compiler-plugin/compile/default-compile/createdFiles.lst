@@ -3,5 +3,6 @@ com\zootycoon\gui\GUIManager.class
 com\zootycoon\ZooTycoon.class
 com\zootycoon\commands\ZooCommand.class
 com\zootycoon\managers\AnimalManager.class
+com\zootycoon\managers\EconomyManager.class
 com\zootycoon\listeners\ZooListener.class
 com\zootycoon\objects\Zoo.class

@@ -3,9 +3,9 @@ package com.zootycoon;
 import com.zootycoon.commands.ZooCommand;
 import com.zootycoon.gui.GUIManager;
 import com.zootycoon.listeners.ZooListener;
+import com.zootycoon.managers.AnimalManager;
+import com.zootycoon.managers.EconomyManager;
 import com.zootycoon.managers.ZooManager;
-import net.milkbowl.vault.economy.Economy;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ZooTycoon extends JavaPlugin {
@@ -13,17 +13,14 @@ public final class ZooTycoon extends JavaPlugin {
     private static ZooTycoon instance;
     private ZooManager zooManager;
     private GUIManager guiManager;
-    private Economy economy = null;
+    private EconomyManager economyManager;
 
     @Override
     public void onEnable() {
         instance = this;
 
-        if (!setupEconomy()) {
-            getLogger().warning(String.format("[%s] - Vault not found or disabled! Economy features will be disabled.",
-                    getDescription().getName()));
-        }
-
+        // Initialize managers
+        economyManager = new EconomyManager(this);
         zooManager = new ZooManager(this);
         guiManager = new GUIManager(this);
 
@@ -31,7 +28,7 @@ public final class ZooTycoon extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new ZooListener(this), this);
         getServer().getPluginManager().registerEvents(guiManager, this);
-        getServer().getPluginManager().registerEvents(new com.zootycoon.managers.AnimalManager(this), this);
+        getServer().getPluginManager().registerEvents(new AnimalManager(this), this);
 
         getLogger().info("ZooTycoon has been enabled!");
     }
@@ -41,19 +38,10 @@ public final class ZooTycoon extends JavaPlugin {
         if (zooManager != null) {
             zooManager.saveZoos();
         }
+        if (economyManager != null) {
+            economyManager.saveEconomy();
+        }
         getLogger().info("ZooTycoon has been disabled!");
-    }
-
-    private boolean setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        economy = rsp.getProvider();
-        return economy != null;
     }
 
     public static ZooTycoon getInstance() {
@@ -68,7 +56,7 @@ public final class ZooTycoon extends JavaPlugin {
         return guiManager;
     }
 
-    public Economy getEconomy() {
-        return economy;
+    public EconomyManager getEconomyManager() {
+        return economyManager;
     }
 }

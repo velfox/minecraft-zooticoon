@@ -116,6 +116,12 @@ public class ZooCommand implements CommandExecutor {
             return true;
         }
 
+        if (args[0].equalsIgnoreCase("monnyload")) {
+            plugin.getEconomyManager().depositPlayer(player, 10000.0);
+            player.sendMessage(ChatColor.GREEN + "Money loaded! +$10000");
+            return true;
+        }
+
         return true;
     }
 }
