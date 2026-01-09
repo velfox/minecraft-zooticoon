@@ -20,11 +20,8 @@ public final class ZooTycoon extends JavaPlugin {
         instance = this;
 
         if (!setupEconomy()) {
-            getLogger().severe(
-                    String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
-            // We don't disable the plugin, just warns, so people can simple use it without
-            // economy or install Vault
-            // But for this requirement we want economy.
+            getLogger().warning(String.format("[%s] - Vault not found or disabled! Economy features will be disabled.",
+                    getDescription().getName()));
         }
 
         zooManager = new ZooManager(this);
